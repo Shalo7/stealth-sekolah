@@ -1,0 +1,4 @@
+repository "stealth-sekolah/stealth-sekolah@18968269925854@cloud"
+  path "/"
+    br "/main"
+    co "/main"
