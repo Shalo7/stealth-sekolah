@@ -6,7 +6,7 @@ public class EnemySightController : MonoBehaviour
     [SerializeField] PlayerMarker plr;
     [SerializeField] float visionDot;
     [SerializeField] float minDist;
-    Action<Transform> playerSighted;
+    public Action<Transform> playerSighted;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,23 +31,23 @@ public class EnemySightController : MonoBehaviour
         float plrDist = (plr.transform.position - transform.position).magnitude;
         Vector3 dir = (plr.transform.position - transform.position).normalized;
         var flt_DotToPlayer = Vector3.Dot(dir, transform.forward);
-        print(flt_DotToPlayer);
         Debug.DrawRay(transform.position, transform.forward * 3f, Color.blue);
         Debug.DrawRay(transform.position, dir * 3f, Color.red);
 
-        //Check if the player is within range.
-        if (minDist < plrDist) return;
+        //Check if the player is within range, if not then send event.
+        if (minDist < plrDist) {playerSighted?.Invoke(null); return;}
 
         //print("Player within range!");
 
-        //Check if the player is within field of view
-        if (flt_DotToPlayer < visionDot) return;
+        //Check if the player is within field of view, if not then send event.
+        if (flt_DotToPlayer < visionDot) {playerSighted?.Invoke(null); return;}
 
-        // Check if the player is not behind any object to be seen clearly.
-        print("Player within field of view!");
+        // Check if the player is not behind any object to be seen clearly. To be seen or not, send event regardless.
+        //print("Player within field of view!");
         RaycastHit hit;
         bool castCheck = Physics.Raycast(transform.position, dir, out hit);
-        if (!hit.transform.TryGetComponent<PlayerMarker>(out PlayerMarker pm)) return;
-        print($"Player is seen and their name is {pm.transform.name}");
+        if (!hit.transform.TryGetComponent<PlayerMarker>(out PlayerMarker pm)) {playerSighted?.Invoke(null); return;}
+        playerSighted?.Invoke(pm.transform);
+        //print($"Player is seen and their name is {pm.transform.name}");
     }
 }
