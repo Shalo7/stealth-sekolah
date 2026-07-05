@@ -22,6 +22,8 @@ public class FieldOfView : MonoBehaviour
 
     private void Start()
     {
+        print("started");
+        meshFilter = gameObject.AddComponent<MeshFilter>();
         mesh = new Mesh();
         meshFilter.mesh = mesh;
     }
@@ -43,15 +45,15 @@ public class FieldOfView : MonoBehaviour
         var vertexIndex = 1;
         var trianglesIndex = 0;
 
-        vertices[0] = origin;
+        vertices[0] = transform.position;
 
         for (int i = 0; i <= rayCount; i++)
         {
-            var hit = PhysicsX.Raycast(origin, MathfX.AngleToVector3D(angle), layerMask, distance, debug: true);
-            var vertex = hit.collider ? hit.point : origin + MathfX.AngleToVector3D(angle + transform.eulerAngles.y) * distance;
+            var hit = PhysicsX.Raycast(transform.position, MathfX.AngleToVector3D(angle), layerMask, distance, debug: true);
+            var vertex = hit.collider ? hit.point : transform.position + MathfX.AngleToVector3D(angle + transform.eulerAngles.y) * distance;
 
             if (hit.collider != null && CompareLayer(hit.collider.gameObject.layer, targetMask))
-                IsTarget = true;
+                {IsTarget = true; print(hit.transform.name);}
 
             vertices[vertexIndex] = vertex;
 
