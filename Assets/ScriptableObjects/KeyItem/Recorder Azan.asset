@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 067b57e271d600148a01bdc10105d4c6, type: 3}
+  m_Name: Recorder Azan
+  m_EditorClassIdentifier: Assembly-CSharp::KeyItemData
+  itemName: Recorder Azan
+  itemDescription: Ini Recorder Azan
+  icon: {fileID: 21300000, guid: ab9d145342137f14ea071f6ea0020415, type: 3}
