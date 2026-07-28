@@ -4,11 +4,10 @@ public class HUDUi : MonoBehaviour
 {
     public HUDUIslot[] slots;
 
-    InventorySystem inventory;
+    //[SerializeField] InventorySystem inventory;
 
     void Start()
     {
-        inventory = FindFirstObjectByType<InventorySystem>();
         Refresh();
     }
 
@@ -16,12 +15,12 @@ public class HUDUi : MonoBehaviour
     {
         for (int i = 0; i < slots.Length; i++)
         {
-            if (i < inventory.throwableItems.Count)
-                slots[i].SetItem(inventory.throwableItems[i]);
+            if (i < InventorySystem.instance.throwableItems.Count)
+                slots[i].SetItem(InventorySystem.instance.throwableItems[i]);
             else
                 slots[i].Clear();
 
-            slots[i].SetSelected(i == inventory.selectedThrowableIndex);
+            slots[i].SetSelected(i == InventorySystem.instance.selectedThrowableIndex);
         }
     }
 }

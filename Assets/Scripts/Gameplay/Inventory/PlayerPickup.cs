@@ -2,14 +2,13 @@ using UnityEngine;
 
 public class PlayerPickup : MonoBehaviour
 {
-    [SerializeField] float pickupDistance = 3f;
 
-    private InventorySystem inventory;
+    [SerializeField] float interactDistance = 3f;
+
     private Camera cam;
 
     void Start()
     {
-        inventory = GetComponent<InventorySystem>();
         cam = Camera.main;
     }
 
@@ -25,17 +24,29 @@ public class PlayerPickup : MonoBehaviour
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
-        if (Physics.Raycast(ray, out RaycastHit hit, pickupDistance))
+        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
         {
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+
+            if (interactable != null)
+            {
+                interactable.Interact(this);
+            }
+            
             WorldItems worldItem = hit.collider.GetComponent<WorldItems>();
 
             if (worldItem!= null)
             {
-                if (inventory.AddItem(worldItem.itemData))
+                if (InventorySystem.instance.AddItem(worldItem.itemData))
                 {
                     Destroy(worldItem.gameObject);
                 }
             }
         }
+    }
+
+    void TryInteract()
+    {
+        
     }
 }

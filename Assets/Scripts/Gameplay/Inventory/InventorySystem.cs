@@ -33,14 +33,7 @@ public class InventorySystem : MonoBehaviour
 
         if (item is KeyItemData key)
         {
-            if (keyItems.Contains(key))
-            {
-                Debug.Log("Already have this key item.");
-                return false;
-            }
-
-            keyItems.Add(key);
-            return true;
+            return AddKeyItem(key);
         }
 
         return false;
@@ -63,5 +56,22 @@ public class InventorySystem : MonoBehaviour
 
         if (selectedThrowableIndex >= throwableItems.Count) 
             selectedThrowableIndex = Mathf.Max(0, throwableItems.Count - 1);
+    }
+
+    public bool HasKeyItem(KeyItemData keyItem)
+    {
+        return keyItems.Contains(keyItem);
+    }
+
+    public bool AddKeyItem(KeyItemData item)
+    {
+        if (keyItems.Contains(item)) return false;
+        keyItems.Add(item);
+        return true;
+    }
+
+    public bool RemoveKeyItem(KeyItemData item)
+    {
+        return keyItems.Remove(item);
     }
 }

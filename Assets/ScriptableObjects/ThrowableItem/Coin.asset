@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b7b5a36400a7349834ea540170c131, type: 3}
   m_Name: Coin
   m_EditorClassIdentifier: Assembly-CSharp::ThrowableItemData
-  itemName: 
-  itemDescription: 
-  icon: {fileID: 0}
+  itemName: Coin
+  itemDescription: Ini Coin
+  icon: {fileID: 21300000, guid: f54b8a1c000382445839f9998b5df75e, type: 3}
   throwForce: 12

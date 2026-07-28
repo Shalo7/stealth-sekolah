@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7068415710448471457}
   - component: {fileID: 1989893815798854042}
   - component: {fileID: 5557608800287437954}
+  - component: {fileID: 4492304667163386865}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -140,3 +141,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0000001, y: 2, z: 1.0000002}
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &4492304667163386865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131688506928138932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 616b73c61da9bcd48940e782b42e37a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldItems
+  itemData: {fileID: 11400000, guid: 5dc93144a37d2b34195fef86a265f363, type: 2}
