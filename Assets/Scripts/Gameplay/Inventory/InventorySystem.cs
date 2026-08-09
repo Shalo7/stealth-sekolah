@@ -17,6 +17,14 @@ public class InventorySystem : MonoBehaviour
         instance = this;
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Debug.Log("You Have" + string.Join(", ", keyItems));
+        }
+    }
+
     public bool AddItem(ItemData item)
     {
         if (item is ThrowableItemData throwable)
@@ -58,15 +66,20 @@ public class InventorySystem : MonoBehaviour
             selectedThrowableIndex = Mathf.Max(0, throwableItems.Count - 1);
     }
 
-    public bool HasKeyItem(KeyItemData keyItem)
+    public bool HasKeyItem(List<KeyItemData> keyItem)
     {
-        return keyItems.Contains(keyItem);
+        foreach (var item in keyItem)
+        {
+            if (!keyItems.Contains(item)) return false;
+        }
+        return true;
     }
 
     public bool AddKeyItem(KeyItemData item)
     {
         if (keyItems.Contains(item)) return false;
         keyItems.Add(item);
+        Debug.Log(item + "added");
         return true;
     }
 

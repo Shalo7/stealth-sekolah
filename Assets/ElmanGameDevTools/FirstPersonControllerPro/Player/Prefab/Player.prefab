@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8478de9d4a445ac4388a6f0d92abcc5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPickup
-  pickupDistance: 3
+  interactDistance: 3
 --- !u!114 &8696460526273954963
 MonoBehaviour:
   m_ObjectHideFlags: 0

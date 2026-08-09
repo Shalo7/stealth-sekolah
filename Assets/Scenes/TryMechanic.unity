@@ -58515,6 +58515,7 @@ GameObject:
   - component: {fileID: 1131495171}
   - component: {fileID: 1131495170}
   - component: {fileID: 1131495174}
+  - component: {fileID: 1131495175}
   m_Layer: 0
   m_Name: Ketos
   m_TagString: Untagged
@@ -58629,11 +58630,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aec728facfe4ddb48b808dda3b2b031a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KeyItemRequired
-  requiredItem: {fileID: 11400000, guid: eb5375fcbeafdfa4280fac640c6258c3, type: 2}
+  requiredItem:
+  - {fileID: 11400000, guid: eb5375fcbeafdfa4280fac640c6258c3, type: 2}
   onSuccess:
     m_PersistentCalls:
       m_Calls: []
   onFail:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1131495175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131495169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 756a2ee0e9214ef4f8d5ac0c8617941e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemTrade
+  itemToTake: {fileID: 11400000, guid: eb5375fcbeafdfa4280fac640c6258c3, type: 2}
+  itemToGive: {fileID: 11400000, guid: 53dee08b3a69a26439b2eeea7f14d4b5, type: 2}
+  removeOldItem: 1
+  onTradeComplete:
     m_PersistentCalls:
       m_Calls: []
 --- !u!43 &1132719454
