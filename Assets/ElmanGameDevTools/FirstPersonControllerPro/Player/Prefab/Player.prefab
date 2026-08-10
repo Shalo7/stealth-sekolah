@@ -429,9 +429,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 5066347983977412304}
   playerCamera: {fileID: 2884546045553303299}
-  speed: 6
-  runSpeed: 9
-  jumpHeight: 1
+  speed: 1
+  runSpeed: 4
+  jumpHeight: 0.5
   gravity: -9.81
   sensitivity: 2
   runKey: 304

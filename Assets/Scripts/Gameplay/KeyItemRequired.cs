@@ -5,19 +5,28 @@ using UnityEngine.Events;
 public class KeyItemRequired : MonoBehaviour, IInteractable
 {
     [Header("Requirements")]
-    public List<KeyItemData> requiredItem = new();
+    [SerializeField] List<KeyItemData> requiredItem = new();
+    [SerializeField] bool tradeEvent = false;
 
     [Header("Events")]
-    public UnityEvent onSuccess;
-    public UnityEvent onFail;
+    [SerializeField] UnityEvent onSuccess;
+    [SerializeField] UnityEvent onFail;
     
     public void Interact(PlayerPickup player)
     {
         InventorySystem inventory = player.GetComponent<InventorySystem>();
         if (inventory.HasKeyItem(requiredItem))
         {
-            ItemTrade.instance.ExecuteTrade(inventory);
-            onSuccess.Invoke();
+            if (tradeEvent)
+            {
+                ItemTrade.instance.ExecuteTrade(inventory);
+                onSuccess.Invoke();
+            }
+            else
+            {
+                onSuccess.Invoke();
+            }
+            
         } 
         else onFail.Invoke();
     }
