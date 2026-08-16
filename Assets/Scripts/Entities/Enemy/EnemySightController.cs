@@ -6,7 +6,7 @@ public class EnemySightController : MonoBehaviour
     [SerializeField] PlayerMarker plr;
     [SerializeField] float visionDot;
     [SerializeField] float minDist;
-    public Action<Transform> playerSighted;
+    public Action<Transform> playerSightedEvent;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,19 +35,19 @@ public class EnemySightController : MonoBehaviour
         Debug.DrawRay(transform.position, dir * 3f, Color.red);
 
         //Check if the player is within range, if not then send event.
-        if (minDist < plrDist) {playerSighted?.Invoke(null); return;}
+        if (minDist < plrDist) {playerSightedEvent?.Invoke(null); return;}
 
         //print("Player within range!");
 
         //Check if the player is within field of view, if not then send event.
-        if (flt_DotToPlayer < visionDot) {playerSighted?.Invoke(null); return;}
+        if (flt_DotToPlayer < visionDot) {playerSightedEvent?.Invoke(null); return;}
 
         // Check if the player is not behind any object to be seen clearly. To be seen or not, send event regardless.
         //print("Player within field of view!");
         RaycastHit hit;
         bool castCheck = Physics.Raycast(transform.position, dir, out hit);
-        if (!hit.transform.TryGetComponent<PlayerMarker>(out PlayerMarker pm)) {playerSighted?.Invoke(null); return;}
-        playerSighted?.Invoke(pm.transform);
+        if (!hit.transform.TryGetComponent<PlayerMarker>(out PlayerMarker pm)) {playerSightedEvent?.Invoke(null); return;}
+        playerSightedEvent?.Invoke(pm.transform);
         //print($"Player is seen and their name is {pm.transform.name}");
     }
 }
