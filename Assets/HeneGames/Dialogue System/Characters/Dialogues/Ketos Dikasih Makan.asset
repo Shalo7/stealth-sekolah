@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4928c8382eaf5104c89b5765ddead552, type: 3}
+  m_Name: Ketos Dikasih Makan
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  nodes:
+  - speaker: {fileID: 11400000, guid: b795ca0272e61bf4fbc8b7d05e5910ef, type: 2}
+    dialogueText: Nahhhh, gitu dong! Kan gua jadi kenyang!!!
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: b795ca0272e61bf4fbc8b7d05e5910ef, type: 2}
+    dialogueText: Thank you bet brok!!
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: b795ca0272e61bf4fbc8b7d05e5910ef, type: 2}
+    dialogueText: Oiye, mumpung lu lagi jalan-jalan, tolong sekalian kasih kunci
+      ruang sekuriti ini dong ke Pak Mukhlis.
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: b795ca0272e61bf4fbc8b7d05e5910ef, type: 2}
+    dialogueText: Dah, pergi sana lu! kenyang bego gua
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: 4752645aa0d4f144783c729ff9e40e5a, type: 2}
+    dialogueText: Nanda koitsu
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []

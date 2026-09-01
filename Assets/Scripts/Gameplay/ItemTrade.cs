@@ -22,15 +22,16 @@ public class ItemTrade : MonoBehaviour
         if (removeOldItem)
         {
             inventory.RemoveKeyItem(itemToTake);
+            Debug.Log("Gives" + itemToTake);
         }
 
         if (itemToGive != null)
         {
             inventory.AddKeyItem(itemToGive);
+            Debug.Log("Traded" + itemToGive);
         }
 
         onTradeComplete?.Invoke();
-        Debug.Log("Traded" + itemToGive);
     }
     
 }

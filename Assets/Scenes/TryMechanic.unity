@@ -58938,6 +58938,7 @@ GameObject:
   - component: {fileID: 1131495170}
   - component: {fileID: 1131495174}
   - component: {fileID: 1131495175}
+  - component: {fileID: 1131495176}
   m_Layer: 0
   m_Name: Ketos
   m_TagString: Untagged
@@ -59057,10 +59058,34 @@ MonoBehaviour:
   tradeEvent: 1
   onSuccess:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1131495176}
+        m_TargetAssemblyTypeName: DialogueEvent, Assembly-CSharp
+        m_MethodName: StartDialogueEvent
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onFail:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1131495176}
+        m_TargetAssemblyTypeName: DialogueEvent, Assembly-CSharp
+        m_MethodName: StartDialogueEvent
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1131495175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59079,6 +59104,21 @@ MonoBehaviour:
   onTradeComplete:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1131495176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131495169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79d30ee738cc7e841acb400459a06c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueEvent
+  dialogues:
+  - {fileID: 11400000, guid: f52355bdcb843924bb458ae2009ffd2b, type: 2}
+  - {fileID: 11400000, guid: 85285e96803a46844898c02c6b7c1244, type: 2}
 --- !u!43 &1132719454
 Mesh:
   m_ObjectHideFlags: 0
@@ -86369,6 +86409,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1657911933}
   - component: {fileID: 1657911934}
+  - component: {fileID: 1657911935}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -86403,6 +86444,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3574adab21d3e394a945a1ea2b4817a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventManager
+--- !u!114 &1657911935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657911932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5013ba73eb7db448b6d49d63f36399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DiaManager
+  dialoguePanel: {fileID: 1768360004}
+  speakerBust: {fileID: 1944058368}
+  speakerNameText: {fileID: 1768360003}
+  dialogueText: {fileID: 1768360002}
+  choiceContainer: {fileID: 1768360001}
+  choiceButtonPrefab: {fileID: 107451708795102064, guid: 0f49ee0f6c556b14f9ea833f37ce7add, type: 3}
+  playerController: {fileID: 1922097845}
+  typingSpeed: 0.02
 --- !u!43 &1673427785
 Mesh:
   m_ObjectHideFlags: 0
@@ -90107,6 +90168,38 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2105545294}
   m_SourcePrefab: {fileID: 100100000, guid: 691d201409042b143af4574240386e30, type: 3}
+--- !u!224 &1768360001 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6225357920278277155, guid: 691d201409042b143af4574240386e30, type: 3}
+  m_PrefabInstance: {fileID: 1768360000}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1768360002 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8792213802241588165, guid: 691d201409042b143af4574240386e30, type: 3}
+  m_PrefabInstance: {fileID: 1768360000}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1768360003 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4429149972526071306, guid: 691d201409042b143af4574240386e30, type: 3}
+  m_PrefabInstance: {fileID: 1768360000}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1768360004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7775144270474206039, guid: 691d201409042b143af4574240386e30, type: 3}
+  m_PrefabInstance: {fileID: 1768360000}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1775209699
 GameObject:
   m_ObjectHideFlags: 0
@@ -99180,6 +99273,17 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &1922097845 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 694847209161167879, guid: 691d201409042b143af4574240386e30, type: 3}
+  m_PrefabInstance: {fileID: 1768360000}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5aea22a45d35674d8c7940217b0fbc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1932697909
 GameObject:
   m_ObjectHideFlags: 0
@@ -100914,6 +101018,17 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &1944058368 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3577165434374210510, guid: 691d201409042b143af4574240386e30, type: 3}
+  m_PrefabInstance: {fileID: 1768360000}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1950239177
 GameObject:
   m_ObjectHideFlags: 0
@@ -101885,6 +102000,8 @@ GameObject:
   - component: {fileID: 1969609572}
   - component: {fileID: 1969609571}
   - component: {fileID: 1969609570}
+  - component: {fileID: 1969609575}
+  - component: {fileID: 1969609574}
   m_Layer: 0
   m_Name: Ibu Kantin
   m_TagString: Untagged
@@ -101987,6 +102104,47 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1969609574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969609569}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 756a2ee0e9214ef4f8d5ac0c8617941e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemTrade
+  itemToTake: {fileID: 11400000, guid: 1033ef7cc08b895408a565ad35fac91e, type: 2}
+  itemToGive: {fileID: 11400000, guid: eb5375fcbeafdfa4280fac640c6258c3, type: 2}
+  removeOldItem: 1
+  onTradeComplete:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1969609575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969609569}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec728facfe4ddb48b808dda3b2b031a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KeyItemRequired
+  requiredItem:
+  - {fileID: 11400000, guid: 1033ef7cc08b895408a565ad35fac91e, type: 2}
+  - {fileID: 11400000, guid: 1033ef7cc08b895408a565ad35fac91e, type: 2}
+  - {fileID: 11400000, guid: 1033ef7cc08b895408a565ad35fac91e, type: 2}
+  tradeEvent: 1
+  onSuccess:
+    m_PersistentCalls:
+      m_Calls: []
+  onFail:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1986623036
 GameObject:
   m_ObjectHideFlags: 0

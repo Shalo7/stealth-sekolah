@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4928c8382eaf5104c89b5765ddead552, type: 3}
+  m_Name: Ketos Minta Makan
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  nodes:
+  - speaker: {fileID: 11400000, guid: b795ca0272e61bf4fbc8b7d05e5910ef, type: 2}
+    dialogueText: WOY! Lu kenapa ga di kelas?!!
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: b795ca0272e61bf4fbc8b7d05e5910ef, type: 2}
+    dialogueText: Aduhhh, perut gua laper banget lagi
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: b795ca0272e61bf4fbc8b7d05e5910ef, type: 2}
+    dialogueText: Gini dah, lu kalo beliin gua makanan di bu puput, gua ga laporin
+      lu
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: b795ca0272e61bf4fbc8b7d05e5910ef, type: 2}
+    dialogueText: Nah, cepet beliin gua makanan sana! Laper banget gua asu.
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: 4752645aa0d4f144783c729ff9e40e5a, type: 2}
+    dialogueText: Cih, mendokusai
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: 4752645aa0d4f144783c729ff9e40e5a, type: 2}
+    dialogueText: Kayaknya gua harus kasih ni anak makan dah
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []

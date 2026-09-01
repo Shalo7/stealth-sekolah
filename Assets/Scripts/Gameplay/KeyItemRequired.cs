@@ -29,5 +29,6 @@ public class KeyItemRequired : MonoBehaviour, IInteractable
             
         } 
         else onFail.Invoke();
+        Debug.Log("Interacted");
     }
 }
