@@ -2,6 +2,8 @@ using System;
 using NUnit.Framework.Interfaces;
 using UnityEngine;
 using UnityEngine.AI;
+using EntityData.Enemy;
+using System.Collections.Generic;
 
 public class PatrollingEnemyLogic : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class PatrollingEnemyLogic : MonoBehaviour
     [SerializeField] float searchRestDuration;
     [SerializeField] float chaseSpd = 7f;
     [SerializeField] float walkSpd = 3.5f;
+    [SerializeField] List<EntityData.Enemy.EnemyOrderlyPatrolData> patrolRoute = new List<EnemyOrderlyPatrolData>();
+    [SerializeField] int currentRoute = 0;
     [SerializeField] Animator animator;
 
     [SerializeField] ENEMYSTATES currentState;
@@ -27,8 +31,8 @@ public class PatrollingEnemyLogic : MonoBehaviour
 
     private Vector3 patrolWalkPoint;
     private bool patrolWalkPointSet;
-    private Vector3 investigateWalkPoint;
-    private bool investigateWalkPointSet;
+    private Vector3 investigatePoint;
+    private bool investigatePointSet;
     private bool searchPointSet;
 
     void OnEnable()
@@ -48,18 +52,20 @@ public class PatrollingEnemyLogic : MonoBehaviour
     void Update()
     {
         if (patrollingEnemyAlertController == null) {Debug.LogError("No alert controller!"); return;}
-        if (patrollingEnemyAlertController.GetCurrentAlertBar() > 0)
+        if (patrollingEnemyAlertController.GetHighReadinessStatus())
         {
-            if (currentState == ENEMYSTATES.PATROL || currentState == ENEMYSTATES.IDLE) {currentState = ENEMYSTATES.SEARCH;}    
+            if (currentState == ENEMYSTATES.PATROL || currentState == ENEMYSTATES.IDLE || currentState == ENEMYSTATES.STRUCTUREDPATROL) {currentState = ENEMYSTATES.SEARCH;}    
         }
         else
         {
-            if (currentState != ENEMYSTATES.OBSERVING) currentState = defaultState;
+            if (currentState != ENEMYSTATES.OBSERVING && currentState != ENEMYSTATES.OBSERVINGCOOLDOWN) currentState = defaultState;
         }
 
         if (currentState == ENEMYSTATES.PATROL) {Patroling(); return;}
-        if (currentState == ENEMYSTATES.INVESTIGATEWALK) {InvestigateWalk(); return;}
+        if (currentState == ENEMYSTATES.STRUCTUREDPATROL) {StructurelyPatrol(); return;}
+        if (currentState == ENEMYSTATES.INVESTIGATEWALK) {Investigate(); return;}
         if (currentState == ENEMYSTATES.OBSERVING) {ObserveTarget(); return;}
+        if (currentState == ENEMYSTATES.OBSERVINGCOOLDOWN) {ObserveTargetCooldown(); return;}
         if (currentState == ENEMYSTATES.SEARCH) {Search(); return;}
         if (currentState == ENEMYSTATES.CHASE) {Chase(); return;}
     }
@@ -68,8 +74,8 @@ public class PatrollingEnemyLogic : MonoBehaviour
     private void enemyListenedReceiver(Vector3 vector)
     {
         if (patrollingEnemyAlertController == null) {Debug.LogError("No alert controller");return;}
-        investigateWalkPoint = vector;
-        investigateWalkPointSet = true;
+        investigatePoint = vector;
+        investigatePointSet = true;
         currentState = ENEMYSTATES.INVESTIGATEWALK;
         patrollingEnemyAlertController.AddAlertBar(10f);
     }
@@ -82,22 +88,29 @@ public class PatrollingEnemyLogic : MonoBehaviour
             if (currentState == ENEMYSTATES.CHASE) return;
             currentState = ENEMYSTATES.OBSERVING;
             seenTarget = target;
-            print(seenTarget);
+            //print(seenTarget);
         }
         else
         {
             if (seenTarget == null) return;
-            if (seenTarget != null) {navAgent.SetDestination(seenTarget.transform.position); currentState = defaultState;}
+            if (seenTarget != null) 
+            {
+                if (currentState == ENEMYSTATES.CHASE)
+                {
+                    investigatePointSet = true;
+                    investigatePoint = seenTarget.transform.position;
+                }
+            }
             seenTarget = null;
         }
     }
 
-    private float patrolRestCounter = 0f;
     //checks if enemy has patrol point, if not generate one and walk towards it.
+    private float patrolRestCounter = 0f;
     private void Patroling()
     {
         navAgent.speed = walkSpd;
-        investigateWalkPointSet = false;
+        investigatePointSet = false;
         searchPointSet = false;
         if (!patrolWalkPointSet)
         {
@@ -135,41 +148,43 @@ public class PatrollingEnemyLogic : MonoBehaviour
         }*/
     }
 
-    private float investigateRestCounter = 0f;
     //check if they enemy has a target to investigate, if not then return to default state.
-    private void InvestigateWalk()
+    private float investigateRestCounter = 0f;
+    private void Investigate()
     {
-        navAgent.speed = walkSpd;
+        if (patrollingEnemyAlertController.GetHighReadinessStatus()) {navAgent.speed = chaseSpd;}
+        else {navAgent.speed = walkSpd;}
         searchPointSet = false;
         patrolWalkPointSet = false;
-        if (!investigateWalkPointSet)
+        if (!investigatePointSet)
         {
             currentState = defaultState;
         }
 
-        if (investigateWalkPointSet)
+        if (investigatePointSet)
         {
-            navAgent.SetDestination(investigateWalkPoint);
+            navAgent.SetDestination(investigatePoint);
         }
 
-        Vector3 distanceToWalkPoint = transform.position - investigateWalkPoint;
+        Vector3 distanceToWalkPoint = transform.position - investigatePoint;
         //animator.SetFloat("Velocity", 0.2f);
 
         if (distanceToWalkPoint.magnitude <= Mathf.Abs(0.1f))
         {
             if (investigateRestCounter <= investigateRestDuration) {investigateRestCounter += Time.deltaTime; return;}
-            investigateWalkPointSet = false;
+            investigatePointSet = false;
             investigateRestCounter = 0f;
             currentState = ENEMYSTATES.SEARCH;
         }
+
     }
 
-    private float searchRestCounter;
     //check if enemy has target position to search for, if not generate then walk over it.
+    private float searchRestCounter;
     private void Search()
     {
         navAgent.speed = walkSpd;
-        investigateWalkPointSet = false;
+        investigatePointSet = false;
         patrolWalkPointSet = false;
         Vector3 destination = Vector3.zero;
         if (!searchPointSet)
@@ -177,7 +192,7 @@ public class PatrollingEnemyLogic : MonoBehaviour
             float randomZ = UnityEngine.Random.Range(-patrolWalkPointRange, patrolWalkPointRange);
             float randomX = UnityEngine.Random.Range(-patrolWalkPointRange, patrolWalkPointRange);
             destination = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-            navAgent.destination = destination;
+            navAgent.SetDestination(destination);
             searchPointSet = true;
         }
 
@@ -192,15 +207,20 @@ public class PatrollingEnemyLogic : MonoBehaviour
         }
     }
 
-    //Run this code when player is spotted during low readiness alert state.
+    //Run this code when player is spotted.
     float alertDelayCounter = 0f;
     float alertDuration = 0.5f;
     private void ObserveTarget()
     {
-        print("observing!");
-        if (seenTarget == null) {currentState = defaultState; return;}
+        //print("observing!");
+        if (seenTarget == null) 
+        {
+            currentState = ENEMYSTATES.OBSERVINGCOOLDOWN;
+            return;
+        }
+
         navAgent.SetDestination(transform.position);
-        if (patrollingEnemyAlertController.GetHighReadinessStatus()) {currentState = ENEMYSTATES.CHASE; return;}
+        if (patrollingEnemyAlertController.GetHighReadinessStatus()) {patrollingEnemyAlertController.AddAlertBar(1000); currentState = ENEMYSTATES.CHASE; return;}
         if (patrollingEnemyAlertController.GetCurrentAlertBar() >= patrollingEnemyAlertController.GetCurrentMaxAlertBar())
         {currentState = ENEMYSTATES.CHASE; return;}
 
@@ -210,20 +230,27 @@ public class PatrollingEnemyLogic : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, v3_TargetRotation, Time.deltaTime * flt_Lookspd);
         
         float dist = (seenTarget.transform.position - transform.position).magnitude;
-        if (dist <= 6f) { currentState = ENEMYSTATES.CHASE; return;}
+        if (dist <= 6f) { patrollingEnemyAlertController.AddAlertBar(1000); return;}
         if (alertDelayCounter <= alertDuration)
         {
             alertDelayCounter += Time.deltaTime;
-            print("counting!");
+            //print("counting!");
         }
         else
         {
             patrollingEnemyAlertController.AddAlertBar(7.5f);
-            print("added value!");
+            //print("added value!");
             alertDelayCounter = 0f;
         }
     }
 
+    //if the enemy lost sight of the player while observing run this code.
+    private void ObserveTargetCooldown()
+    {
+        if (patrollingEnemyAlertController.GetCurrentAlertBar() <= 0) {currentState = defaultState;}
+    }
+    
+    //chase the player
     private void Chase()
     {
         navAgent.speed = chaseSpd;
@@ -241,6 +268,36 @@ public class PatrollingEnemyLogic : MonoBehaviour
         {
             if (seenTarget == null)
             { currentState = defaultState; }
+        }
+    }
+
+    //patrols its set path.
+    float StopNLookCount = 0f;
+    private void StructurelyPatrol()
+    {
+        if (patrolRoute.Count <= 0) {Debug.LogWarning("No routes!"); return;}
+        EnemyOrderlyPatrolData currentPath = patrolRoute[currentRoute];
+        Vector3 distanceToTarget = currentPath.path.position - transform.position;
+
+        if (distanceToTarget.magnitude <= Mathf.Abs(0.1f))
+        {
+            if (!currentPath.stopNLook)
+            {
+                if (currentRoute < (patrolRoute.Count - 1)) currentRoute++;
+                else {currentRoute = 0;}
+            }
+            else
+            {
+                if (StopNLookCount <= currentPath.lookTime) {StopNLookCount += Time.deltaTime; return;}
+
+                StopNLookCount = 0;
+                if (currentRoute < (patrolRoute.Count - 1)) currentRoute++;
+                else {currentRoute = 0;}
+            }
+        }
+        else
+        {
+            navAgent.destination = currentPath.path.position;
         }
     }
 }

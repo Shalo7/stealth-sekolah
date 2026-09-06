@@ -29,7 +29,15 @@ public class PatrollingEnemyAlertController : MonoBehaviour
         if (patrollingEnemyLogic.GetCurrentEnemyState() == ENEMYSTATES.INVESTIGATEWALK || patrollingEnemyLogic.GetCurrentEnemyState() == ENEMYSTATES.INVESTIGATERUN || patrollingEnemyLogic.GetCurrentEnemyState() == ENEMYSTATES.CHASE || patrollingEnemyLogic.GetCurrentEnemyState() == ENEMYSTATES.OBSERVING) return;
 
         if (drainCounter <= drainDelay) {drainCounter += Time.deltaTime; return;}
-        currentAlertBar -= drainValue;
+        if (patrollingEnemyLogic.GetCurrentEnemyState() == ENEMYSTATES.OBSERVINGCOOLDOWN)
+        {
+            currentAlertBar -= drainValue * 2f;
+        }
+        else
+        {
+            currentAlertBar -= drainValue;          
+        }
+  
         drainCounter = 0;
         if (currentAlertBar <= 0f) {isHighReadiness = false;}
     }
