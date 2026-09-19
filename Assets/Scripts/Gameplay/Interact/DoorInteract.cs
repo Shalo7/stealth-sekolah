@@ -6,7 +6,7 @@ public class DoorInteract : MonoBehaviour
     [SerializeField] float openAngle = 90f;
     [SerializeField] float openSpeed = 0.5f;
     
-    Transform doorPivot;
+    [SerializeField] Transform doorPivot;
 
     bool isOpen = false;
     bool isMoving = false;
@@ -21,11 +21,12 @@ public class DoorInteract : MonoBehaviour
         openRotation = closedRotation * Quaternion.Euler(0f, openAngle, 0f);
     }
 
+    //rotates the door hinge so the door opens on its pivot
     IEnumerator RotateDoor(Quaternion targetRotation)
     {
         isMoving = true;
 
-        Quaternion startRotation = transform.rotation;
+        Quaternion startRotation = doorPivot.rotation;
         float elapsedTime = 0f;
 
         while (elapsedTime < openSpeed)
@@ -34,16 +35,17 @@ public class DoorInteract : MonoBehaviour
 
             float t = elapsedTime / openSpeed;
 
-            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            doorPivot.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
             yield return null;
         }
         
-        transform.rotation = targetRotation;
+        doorPivot.rotation = targetRotation;
 
         isMoving = false;
     }
 
+    //opens the door. Checks if its in the process of opening. If not, open/close it.
     public void OpenDoor()
     {
         Debug.Log("Door Opened");
@@ -59,6 +61,5 @@ public class DoorInteract : MonoBehaviour
             StartCoroutine(RotateDoor(closedRotation));
             isOpen = false;
         }
-        
     }
 }
