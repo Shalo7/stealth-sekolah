@@ -1,4 +1,5 @@
 using System.Collections;
+using ElmanGameDevTools.PlayerSystem;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,7 +17,7 @@ public class DiaManager : MonoBehaviour
     [SerializeField] Button choiceButtonPrefab;
 
     [Header("Lock Player")]
-    [SerializeField] MonoBehaviour playerController;
+    [SerializeField] PlayerController playerController;
     //[SerializeField] MonoBehaviour playerInteract;
 
     [Header("Typewriter")]
@@ -26,6 +27,8 @@ public class DiaManager : MonoBehaviour
 
     private DialogueData currentDialogue;
     private int currentNodeIndex;
+
+    private DialogueEvent currentDialogueEvent;
 
     Coroutine typingCoroutine;
     bool isTyping;
@@ -55,7 +58,7 @@ public class DiaManager : MonoBehaviour
         }
     }
 
-    public void StartDia(DialogueData dialogue)
+    public void StartDia(DialogueData dialogue, DialogueEvent dE)
     {
         if (dialogue == null) return;
         currentDialogue = dialogue;
@@ -67,6 +70,8 @@ public class DiaManager : MonoBehaviour
         dialoguePanel.SetActive(true);
 
         ShowNode();
+        currentDialogueEvent = dE;
+        DirectPlayerToNPC(true);
     }
 
     private void ShowNode()
@@ -166,7 +171,7 @@ public class DiaManager : MonoBehaviour
         {
             if (choice.nextDialogue != null)
             {
-                StartDia(choice.nextDialogue);
+                StartDia(choice.nextDialogue, currentDialogueEvent);
             }
             else
             {
@@ -186,11 +191,13 @@ public class DiaManager : MonoBehaviour
     private void EndDialogue()
     {
         isDialogueActive = false;
+        DirectPlayerToNPC(false);
         UnlockPlayer();
 
         dialoguePanel.SetActive(false);
 
         currentDialogue = null;
+        currentDialogueEvent = null;
     }
 
     private void LockPlayer()
@@ -203,5 +210,44 @@ public class DiaManager : MonoBehaviour
     {
         playerController.enabled = true;
         //playerInteract.enabled = true;
+    }
+
+    //Directs player attention to the NPC they are interacting
+    Coroutine CO_DirectPlayerToNPC;
+    private float directLookSpd = 3f;
+    IEnumerator IE_DirectPlayerToNPC()
+    {
+        while(true)
+        {
+            if (currentDialogueEvent == null) {CO_DirectPlayerToNPC = null; break;}
+            Vector3 dirObject = currentDialogueEvent.transform.position - playerController.transform.position;
+            dirObject.y = 0f;
+            Quaternion targetRotationObject = Quaternion.LookRotation(dirObject);
+            Quaternion cameraRotationObject = Quaternion.Euler(Vector3.zero);
+        
+            if (dirObject.sqrMagnitude > 0.001f)
+            {
+                playerController.transform.rotation = Quaternion.Slerp(playerController.transform.rotation, targetRotationObject, directLookSpd * Time.deltaTime);
+            }
+
+            playerController.playerCamera.transform.rotation = Quaternion.Slerp(playerController.playerCamera.transform.rotation, targetRotationObject, directLookSpd * Time.deltaTime);
+            
+            yield return null; 
+        }
+    }
+    private void DirectPlayerToNPC(bool t)
+    {
+        if (playerController == null) return;
+        if (CO_DirectPlayerToNPC != null) return;
+        if (t)
+        {
+            CO_DirectPlayerToNPC = StartCoroutine(IE_DirectPlayerToNPC());     
+        }
+        else
+        {
+            if (CO_DirectPlayerToNPC == null) return;
+            StopCoroutine(CO_DirectPlayerToNPC);
+            CO_DirectPlayerToNPC = null;
+        }
     }
 }

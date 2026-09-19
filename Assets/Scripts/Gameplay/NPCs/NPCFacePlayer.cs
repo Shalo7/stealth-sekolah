@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class NPCFacePlayer : MonoBehaviour
@@ -18,7 +19,7 @@ public class NPCFacePlayer : MonoBehaviour
         if (IsPlayerInRange())
         {
             FacePlayer();
-            Debug.Log("Player Found");
+            //Debug.Log("Player Found");
         }
     }
 
@@ -34,12 +35,21 @@ public class NPCFacePlayer : MonoBehaviour
     {
         Vector3 direction = player.position - transform.position;
         direction.y = 0f;
-        
-        if (direction.sqrMagnitude < 0.001f) return;
-
         Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        //Debug.DrawRay(transform.position, direction * 3f, Color.red);
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            if (Quaternion.Angle(transform.rotation, targetRotation) < 0.5f)
+            {
+                transform.rotation = targetRotation;
+            }
+            else
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);   
+            }
+        }   
+        //if (CO_FacePlayer != null) return;
+        //CO_FacePlayer = StartCoroutine(IE_FacePlayer());
     }
 
     private void OnDrawGizmosSelected()

@@ -4,6 +4,7 @@ using UnityEngine;
 public class DialogueEvent : MonoBehaviour
 {
     [SerializeField] List<DialogueData> dialogues;
+    [SerializeField] NPCFacePlayer facePlr;
 
     public void StartDialogueEvent(int dialogueIndex)
     {
@@ -18,6 +19,6 @@ public class DialogueEvent : MonoBehaviour
             return;
         }
 
-        DiaManager.instance.StartDia(dialogues[dialogueIndex]);
+        DiaManager.instance.StartDia(dialogues[dialogueIndex], this);
     }
 }
