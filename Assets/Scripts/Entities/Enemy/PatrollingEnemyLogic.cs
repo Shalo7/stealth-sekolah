@@ -1,5 +1,4 @@
 using System;
-using NUnit.Framework.Interfaces;
 using UnityEngine;
 using UnityEngine.AI;
 using EntityData.Enemy;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 
 public class PatrollingEnemyLogic : MonoBehaviour
 {
+    [SerializeField] ResetScene resetScene;
     [SerializeField] NavMeshAgent navAgent;
     [SerializeField] PlayerMarker plr;
     [SerializeField] LayerMask groundLayer, playerLayer;
@@ -27,7 +27,7 @@ public class PatrollingEnemyLogic : MonoBehaviour
     
     [SerializeField] PatrollingEnemyEventComms patrollingEnemyEventComms;
     [SerializeField] PatrollingEnemyAlertController patrollingEnemyAlertController;
-    Transform seenTarget;
+    [SerializeField] Transform seenTarget;
 
     private Vector3 patrolWalkPoint;
     private bool patrolWalkPointSet;
@@ -83,11 +83,11 @@ public class PatrollingEnemyLogic : MonoBehaviour
     //receive info that enemy spots a player
     private void playerSightedReceiver(Transform target)
     {
+        seenTarget = target;
         if (target != null)
         {
             if (currentState == ENEMYSTATES.CHASE) return;
             currentState = ENEMYSTATES.OBSERVING;
-            seenTarget = target;
             //print(seenTarget);
         }
         else
@@ -253,6 +253,7 @@ public class PatrollingEnemyLogic : MonoBehaviour
     //chase the player
     private void Chase()
     {
+        Debug.Log("chasing!");
         navAgent.speed = chaseSpd;
         if (seenTarget != null)
         {
@@ -261,18 +262,28 @@ public class PatrollingEnemyLogic : MonoBehaviour
             var v3_TargetRotation = Quaternion.LookRotation(v3_Dir);
             var flt_Lookspd = 24f;
             transform.rotation = Quaternion.Slerp(transform.rotation, v3_TargetRotation, Time.deltaTime * flt_Lookspd);
-        }
 
-        Vector3 distanceToPoint = transform.position - navAgent.destination;
-        if (distanceToPoint.magnitude <= Mathf.Abs(0.1f))
+            Vector3 distanceToPoint = seenTarget.transform.position - transform.position;
+            if (distanceToPoint.magnitude <= Mathf.Abs(2f))
+            {
+                if (seenTarget == null)
+                { currentState = defaultState; }
+                else
+                {
+                    if (resetScene != null) resetScene.ResetSceneFunc();
+                }
+            }
+        }
+        else
         {
-            if (seenTarget == null)
-            { currentState = defaultState; }
+            currentState = defaultState;
         }
     }
 
     //patrols its set path.
     float StopNLookCount = 0f;
+    float lookDirectionSpd = 3f;
+    float directionThreshold = 0.99f;
     private void StructurelyPatrol()
     {
         if (patrolRoute.Count <= 0) {Debug.LogWarning("No routes!"); return;}
@@ -281,6 +292,25 @@ public class PatrollingEnemyLogic : MonoBehaviour
 
         if (distanceToTarget.magnitude <= Mathf.Abs(0.1f))
         {
+            if (currentPath.lookFirst && currentPath.lookDirection != null)
+            {
+                Vector3 direction = (currentPath.lookDirection.position - transform.position).normalized;
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRot = Quaternion.LookRotation(direction);
+                    float dotDir = Vector3.Dot(transform.forward, direction);
+                    //Debug.Log($"{dotDir} {transform.name}");
+
+                    if (dotDir <= directionThreshold)
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, lookDirectionSpd * Time.deltaTime);
+                        return;
+                    }
+
+                    transform.rotation = targetRot;
+                }
+            }
+
             if (!currentPath.stopNLook)
             {
                 if (currentRoute < (patrolRoute.Count - 1)) currentRoute++;
