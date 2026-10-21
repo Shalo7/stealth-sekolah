@@ -7,6 +7,7 @@ public class KeyItemRequired : MonoBehaviour, IInteractable
     [Header("Requirements")]
     [SerializeField] List<KeyItemData> requiredItem = new();
     [SerializeField] bool tradeEvent = false;
+    [SerializeField] ItemTrade itemTrade;
 
     [Header("Events")]
     [SerializeField] UnityEvent onSuccess;
@@ -14,12 +15,14 @@ public class KeyItemRequired : MonoBehaviour, IInteractable
     
     public void Interact(PlayerPickup player)
     {
+        Debug.Log("Interacted");
         InventorySystem inventory = player.GetComponent<InventorySystem>();
         if (inventory.HasKeyItem(requiredItem))
         {
-            if (tradeEvent)
+            Debug.Log("success ;)");
+            if (tradeEvent && itemTrade != null)
             {
-                ItemTrade.instance.ExecuteTrade(inventory);
+                itemTrade.ExecuteTrade(inventory);
                 onSuccess.Invoke();
             }
             else
@@ -28,7 +31,6 @@ public class KeyItemRequired : MonoBehaviour, IInteractable
             }
             
         } 
-        else onFail.Invoke();
-        Debug.Log("Interacted");
+        else {onFail.Invoke(); Debug.Log("fail ;(");}
     }
 }
