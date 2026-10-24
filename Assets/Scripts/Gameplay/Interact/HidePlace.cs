@@ -4,14 +4,16 @@ using UnityEngine;
 public class HidePlace : MonoBehaviour, IInteractable
 {
     [SerializeField] Transform cameraPos;
-    PlayerController plrCont;
+    [SerializeField] PlayerController plrCont;
 
     bool plrInside = false;
 
     public void Interact(PlayerPickup player)
     {
-        if (plrCont != null) return;
-        plrCont = player.TryGetComponent<PlayerController>(out PlayerController pC) ? pC : null;
+        Debug.Log("interacted!");
+        Debug.Log(player.transform);
+        //if (plrCont != null) return;
+        plrCont = player.transform.TryGetComponent<PlayerController>(out PlayerController pC) ? pC : null;
         ProcessHiding();
     }
 
