@@ -17,7 +17,7 @@ public class PatrollingEnemyAlertController : MonoBehaviour
     void Start()
     {
         patrollingEnemyLogic = transform.parent.TryGetComponent(out PatrollingEnemyLogic c) ? c : null;
-        print (patrollingEnemyLogic);  
+        //print (patrollingEnemyLogic);  
     }
 
     private float drainCounter = 0f;

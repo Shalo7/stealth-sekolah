@@ -230,7 +230,7 @@ public class PatrollingEnemyLogic : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, v3_TargetRotation, Time.deltaTime * flt_Lookspd);
         
         float dist = (seenTarget.transform.position - transform.position).magnitude;
-        if (dist <= 6f) { patrollingEnemyAlertController.AddAlertBar(1000); return;}
+        if (dist <= 10f) { patrollingEnemyAlertController.AddAlertBar(1000); return;}
         if (alertDelayCounter <= alertDuration)
         {
             alertDelayCounter += Time.deltaTime;
