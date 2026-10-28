@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 067b57e271d600148a01bdc10105d4c6, type: 3}
   m_Name: Coin 1
   m_EditorClassIdentifier: Assembly-CSharp::KeyItemData
-  itemName: 
-  itemDescription: 
+  itemName: Duit
+  itemDescription: Ini Duit
   icon: {fileID: 0}

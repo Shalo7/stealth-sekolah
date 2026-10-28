@@ -153,4 +153,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616b73c61da9bcd48940e782b42e37a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldItems
-  itemData: {fileID: 11400000, guid: 5dc93144a37d2b34195fef86a265f363, type: 2}
+  itemData: {fileID: 11400000, guid: 1033ef7cc08b895408a565ad35fac91e, type: 2}
