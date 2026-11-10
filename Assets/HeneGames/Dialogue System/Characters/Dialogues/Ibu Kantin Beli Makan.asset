@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4928c8382eaf5104c89b5765ddead552, type: 3}
+  m_Name: Ibu Kantin Beli Makan
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  nodes:
+  - speaker: {fileID: 11400000, guid: 3e5e644d8d5725941b79d3277f39cbc1, type: 2}
+    dialogueText: Mau beli apa dek?
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: 4752645aa0d4f144783c729ff9e40e5a, type: 2}
+    dialogueText: Nasi uduk pake telor dadar satu mbak
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: 3e5e644d8d5725941b79d3277f39cbc1, type: 2}
+    dialogueText: Okee, harganya 3000 ya dek
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: 4752645aa0d4f144783c729ff9e40e5a, type: 2}
+    dialogueText: Ini duitnya ya mbak
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: 3e5e644d8d5725941b79d3277f39cbc1, type: 2}
+    dialogueText: Duitnya pas yaa, makasih dek
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
+  - speaker: {fileID: 11400000, guid: 4752645aa0d4f144783c729ff9e40e5a, type: 2}
+    dialogueText: Imut juga mbaknya
+    choices: []
+    onDialogueFinished:
+      m_PersistentCalls:
+        m_Calls: []
