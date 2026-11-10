@@ -74,6 +74,8 @@ namespace ElmanGameDevTools.PlayerSystem
         public float groundCheckDistance = 0.5f;
 
         private Vector3 _velocity;
+        private Vector3 movementInput;
+        public Vector3 GetMovementInput() => movementInput;
         private float _currentTilt;
         private float _timer;
         private float _originalHeight;
@@ -85,9 +87,10 @@ namespace ElmanGameDevTools.PlayerSystem
         private bool _isGrounded;
         private bool _isCrouching;
         private bool _hasJumped;
-        private MovementState _currentMovementState = MovementState.Walking;
+        [SerializeField] private MovementState _currentMovementState = MovementState.Walking;
+        public MovementState GetMovementState() => _currentMovementState;
 
-        public enum MovementState { Walking, Running, Crouching, Jumping }
+        public enum MovementState { Idle, Walking, Running, Crouching, Jumping }
 
         public bool IsGrounded => _isGrounded;
         public bool IsCrouching => _isCrouching;
@@ -143,7 +146,7 @@ namespace ElmanGameDevTools.PlayerSystem
 
         private void UpdateMovementState()
         {
-            if (!controller.enabled) return;
+            if (!controller.enabled) { _currentMovementState = MovementState.Idle; return;}
             bool wantsToRun = Input.GetKey(runKey) && Input.GetAxis("Vertical") > 0.1f;
 
             if (!_isGrounded)
@@ -163,14 +166,16 @@ namespace ElmanGameDevTools.PlayerSystem
                 _currentMovementState = wantsToRun ? MovementState.Running : MovementState.Walking;
                 _currentMovementSpeed = wantsToRun ? runSpeed : speed;
             }
+
+            if (movementInput == Vector3.zero) { _currentMovementState = MovementState.Idle; return;}
         }
 
         private void HandleMovement()
         {
             if (!controller.enabled) return;
             // Reverted to Input.GetAxis for smooth built-in interpolation
-            Vector3 moveInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
-            if (moveInput.magnitude > 1f) moveInput.Normalize();
+            movementInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
+            if (movementInput.magnitude > 1f) movementInput.Normalize();
 
             if (Input.GetButtonDown("Jump") && _isGrounded && !_isCrouching)
             {
@@ -182,7 +187,7 @@ namespace ElmanGameDevTools.PlayerSystem
             if (standingHeightMarker != null)
                 standingHeightMarker.transform.position = new Vector3(transform.position.x, transform.position.y + _markerHeightOffset, transform.position.z);
 
-            controller.Move(moveInput * _currentMovementSpeed * Time.deltaTime);
+            controller.Move(movementInput * _currentMovementSpeed * Time.deltaTime);
             _velocity.y += gravity * Time.deltaTime;
             controller.Move(_velocity * Time.deltaTime);
         }

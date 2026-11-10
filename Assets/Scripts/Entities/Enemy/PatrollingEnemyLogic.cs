@@ -99,6 +99,7 @@ public class PatrollingEnemyLogic : MonoBehaviour
                 {
                     investigatePointSet = true;
                     investigatePoint = seenTarget.transform.position;
+                    currentState = ENEMYSTATES.INVESTIGATEWALK;
                 }
             }
             seenTarget = null;
@@ -230,7 +231,7 @@ public class PatrollingEnemyLogic : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, v3_TargetRotation, Time.deltaTime * flt_Lookspd);
         
         float dist = (seenTarget.transform.position - transform.position).magnitude;
-        if (dist <= 6f) { patrollingEnemyAlertController.AddAlertBar(1000); return;}
+        if (dist <= 10f) { patrollingEnemyAlertController.AddAlertBar(1000); return;}
         if (alertDelayCounter <= alertDuration)
         {
             alertDelayCounter += Time.deltaTime;
@@ -253,15 +254,19 @@ public class PatrollingEnemyLogic : MonoBehaviour
     //chase the player
     private void Chase()
     {
-        Debug.Log("chasing!");
+        //Debug.Log("chasing!");
         navAgent.speed = chaseSpd;
         if (seenTarget != null)
         {
+            //Debug.Log($"{navAgent.destination} meanwhile player position is {PlayerMarker.instance.transform.position}");
             navAgent.SetDestination(seenTarget.transform.position);
+            navAgent.angularSpeed = 720f;
+            navAgent.acceleration = 16f;
             var v3_Dir = seenTarget.position - transform.position;
-            var v3_TargetRotation = Quaternion.LookRotation(v3_Dir);
-            var flt_Lookspd = 24f;
-            transform.rotation = Quaternion.Slerp(transform.rotation, v3_TargetRotation, Time.deltaTime * flt_Lookspd);
+            var v3_TargetRotation = Quaternion.LookRotation(new Vector3(v3_Dir.x, 0f, v3_Dir.z));
+            //var flt_Lookspd = 24f;
+            transform.rotation = v3_TargetRotation;
+            Debug.DrawRay(transform.position + (Vector3.up * 1f), v3_Dir * 3f, Color.red);
 
             Vector3 distanceToPoint = seenTarget.transform.position - transform.position;
             if (distanceToPoint.magnitude <= Mathf.Abs(2f))
