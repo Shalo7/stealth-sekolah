@@ -7,9 +7,12 @@ public class InventorySystem : MonoBehaviour
     public static InventorySystem instance;
     public const int MaxThrowableItems = 4;
     public int selectedThrowableIndex = 0;
+    [SerializeField] GameObject keyItemMenu;
 
     public List<ThrowableItemData> throwableItems = new();
     public List<KeyItemData> keyItems = new(); 
+
+    bool isOpen;
 
     private void Awake()
     {
@@ -22,7 +25,17 @@ public class InventorySystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             Debug.Log("You Have" + string.Join(", ", keyItems));
+            ToggleMenu();
         }
+    }
+
+    void ToggleMenu()
+    {
+        isOpen = !isOpen;
+        keyItemMenu.SetActive(isOpen);
+        Time.timeScale = isOpen ? 0f : 1f;
+        Cursor.visible = isOpen;
+        Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     public bool AddItem(ItemData item)

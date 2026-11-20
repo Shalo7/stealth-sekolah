@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   characterPhoto: {fileID: 21300000, guid: 1b3407af2ca4ec740a6da5920bfaabca, type: 3}
-  characterName: Miyamura
+  characterName: Budi

@@ -46,8 +46,9 @@ public class EnemySightController : MonoBehaviour
         //print("Player within field of view!");
         RaycastHit hit;
         bool castCheck = Physics.Raycast(transform.position, dir, out hit);
-        if (!hit.transform.TryGetComponent<PlayerMarker>(out PlayerMarker pm)) {playerSightedEvent?.Invoke(null); return;}
-        playerSightedEvent?.Invoke(pm.transform);
+        if (!castCheck) {playerSightedEvent?.Invoke(null); return;}
+        if (hit.transform.TryGetComponent<PlayerMarker>(out PlayerMarker pm)) {playerSightedEvent?.Invoke(pm.transform);}
+        else {playerSightedEvent?.Invoke(null);}
         //print($"Player is seen and their name is {pm.transform.name}");
     }
 }

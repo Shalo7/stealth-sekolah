@@ -74,6 +74,8 @@ namespace ElmanGameDevTools.PlayerSystem
         public float groundCheckDistance = 0.5f;
 
         private Vector3 _velocity;
+        private Vector3 movementInput;
+        public Vector3 GetMovementInput() => movementInput;
         private float _currentTilt;
         private float _timer;
         private float _originalHeight;
@@ -85,9 +87,10 @@ namespace ElmanGameDevTools.PlayerSystem
         private bool _isGrounded;
         private bool _isCrouching;
         private bool _hasJumped;
-        private MovementState _currentMovementState = MovementState.Walking;
+        [SerializeField] private MovementState _currentMovementState = MovementState.Walking;
+        public MovementState GetMovementState() => _currentMovementState;
 
-        public enum MovementState { Walking, Running, Crouching, Jumping }
+        public enum MovementState { Idle, Walking, Running, Crouching, Jumping }
 
         public bool IsGrounded => _isGrounded;
         public bool IsCrouching => _isCrouching;
@@ -129,6 +132,7 @@ namespace ElmanGameDevTools.PlayerSystem
         /// </summary>
         private void CheckGroundStatus()
         {
+            if (!controller.enabled) return;
             Vector3 origin = transform.position + Vector3.up * controller.radius;
             bool groundHit = Physics.SphereCast(origin, controller.radius * 0.8f, Vector3.down, out _, groundCheckDistance, groundLayer);
             _isGrounded = groundHit || controller.isGrounded;
@@ -142,6 +146,7 @@ namespace ElmanGameDevTools.PlayerSystem
 
         private void UpdateMovementState()
         {
+            if (!controller.enabled) { _currentMovementState = MovementState.Idle; return;}
             bool wantsToRun = Input.GetKey(runKey) && Input.GetAxis("Vertical") > 0.1f;
 
             if (!_isGrounded)
@@ -161,13 +166,16 @@ namespace ElmanGameDevTools.PlayerSystem
                 _currentMovementState = wantsToRun ? MovementState.Running : MovementState.Walking;
                 _currentMovementSpeed = wantsToRun ? runSpeed : speed;
             }
+
+            if (movementInput == Vector3.zero) { _currentMovementState = MovementState.Idle; return;}
         }
 
         private void HandleMovement()
         {
+            if (!controller.enabled) return;
             // Reverted to Input.GetAxis for smooth built-in interpolation
-            Vector3 moveInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
-            if (moveInput.magnitude > 1f) moveInput.Normalize();
+            movementInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
+            if (movementInput.magnitude > 1f) movementInput.Normalize();
 
             if (Input.GetButtonDown("Jump") && _isGrounded && !_isCrouching)
             {
@@ -179,19 +187,21 @@ namespace ElmanGameDevTools.PlayerSystem
             if (standingHeightMarker != null)
                 standingHeightMarker.transform.position = new Vector3(transform.position.x, transform.position.y + _markerHeightOffset, transform.position.z);
 
-            controller.Move(moveInput * _currentMovementSpeed * Time.deltaTime);
+            controller.Move(movementInput * _currentMovementSpeed * Time.deltaTime);
             _velocity.y += gravity * Time.deltaTime;
             controller.Move(_velocity * Time.deltaTime);
         }
 
         private void HandleCrouchLogic()
         {
+            if (!controller.enabled) return;
             _isCrouching = Input.GetKey(crouchKey) || !CanStandUp();
             _targetHeight = _isCrouching ? crouchHeight : _originalHeight;
         }
 
         private void HandleHeightAndCamera()
         {
+            if (!controller.enabled) return;
             float prevHeight = controller.height;
             controller.height = Mathf.Lerp(controller.height, _targetHeight, Time.deltaTime * (1f / crouchSmoothTime));
 
@@ -209,6 +219,7 @@ namespace ElmanGameDevTools.PlayerSystem
 
         private void HandleCameraControl()
         {
+            //if (!controller.enabled) return;
             float mouseX = Input.GetAxis("Mouse X") * sensitivity;
             float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
 
@@ -228,6 +239,7 @@ namespace ElmanGameDevTools.PlayerSystem
 
         private void HandleCameraTilt()
         {
+            if (!controller.enabled) return;
             if (!enableCameraTilt) { _currentTilt = 0; return; }
 
             float keyboardTilt = -Input.GetAxis("Horizontal") * tiltAmount;
@@ -243,6 +255,7 @@ namespace ElmanGameDevTools.PlayerSystem
 
         private void HandleFovChange()
         {
+            if (!controller.enabled) return;
             if (!enableRunFov || playerCamera.GetComponent<Camera>() == null) return;
             bool isActuallyRunning = Input.GetKey(runKey) && Input.GetAxis("Vertical") > 0.1f;
             Camera cam = playerCamera.GetComponent<Camera>();
@@ -251,6 +264,7 @@ namespace ElmanGameDevTools.PlayerSystem
 
         private void HandleHeadBob()
         {
+            if (!controller.enabled) return;
             float moveMag = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).magnitude;
             float currentCamH = _cameraBaseHeight * (controller.height / _originalHeight);
 
@@ -278,6 +292,7 @@ namespace ElmanGameDevTools.PlayerSystem
         /// <returns>True if there is enough space to stand.</returns>
         public bool CanStandUp()
         {
+            if (!controller.enabled) return false;
             if (standingHeightMarker == null) return true;
             Collider[] hits = Physics.OverlapSphere(standingHeightMarker.transform.position, standingCheckRadius, obstacleLayerMask);
             foreach (Collider col in hits)
